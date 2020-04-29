@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GuessMyNumber.API</name>
+    </assembly>
+    <members>
+        <member name="M:GuessMyNumber.Controllers.GameController.CreateGame(System.String,System.String,System.Int32)">
+            <summary>
+            Creates a new game as a host
+            </summary>
+            <param name="playerId">The host player ID</param>
+            <param name="number">The number to be guessed</param>
+        </member>
+        <member name="M:GuessMyNumber.Controllers.GameController.JoinGame(System.String,System.String)">
+            <summary>
+            Joins an existing game as a guesser
+            </summary>
+            <param name="playerId">The player ID</param>
+            <param name="gameId">The existing game ID to join</param>
+        </member>
+        <member name="M:GuessMyNumber.Controllers.GameController.StartGame(System.String,System.String)">
+            <summary>
+            Signal the start for a player on an existing game 
+            </summary>
+            <param name="playerId">The player ID</param>
+            <param name="gameId">The game ID to start</param>
+        </member>
+        <member name="M:GuessMyNumber.Controllers.GameController.PlayGame(System.String,System.String,System.String)">
+            <summary>
+            Plays a turn
+            </summary>
+            <param name="playerId">The player ID</param>
+            <param name="gameId">The game ID</param>
+            <param name="number">The number to test</param>
+        </member>
+        <member name="M:GuessMyNumber.Controllers.GameController.GetJoinableGames(System.String)">
+            <summary>
+            Get a list of joinable games for a given player
+            </summary>
+            <param name="playerId">The player ID</param>
+        </member>
+        <member name="M:GuessMyNumber.Controllers.GameController.GetJoinedGames(System.String)">
+            <summary>
+            Get a list of joinable games for a given player
+            </summary>
+            <param name="playerId">The player ID</param>
+        </member>
+        <member name="M:GuessMyNumber.Controllers.GameController.GetPastGames(System.String)">
+            <summary>
+            Get a list of past games for a given player
+            </summary>
+            <param name="playerId">The player ID</param>
+        </member>
+        <member name="M:GuessMyNumber.Provider.GameProvider.InsertGameFinishedToStats(System.String,System.Boolean,GuessMyNumber.Model.Role,System.Int32)">
+            <summary>Inserts the data for the player stats</summary>
+        </member>
+        <member name="M:GuessMyNumber.Provider.IGameProvider.CreateGame(System.String,System.String,System.Nullable{System.Int32})">
+            <summary>
+            Creates a new game (host)
+            </summary>
+            <param name="playerId">The player ID</param>
+            <param name="number">The number to be guessed</param>
+        </member>
+        <member name="M:GuessMyNumber.Provider.IGameProvider.JoinGame(System.String,System.String,System.Boolean)">
+            <summary>
+            Joins a created game (guesser)
+            </summary>
+            <param name="playerId">The player ID</param>
+            <param name="gameId">The game ID to join</param>
+        </member>
+        <member name="M:GuessMyNumber.Provider.IGameProvider.StartGame(System.String,System.String)">
+            <summary>
+            Starts a created game (host and guesser)
+            </summary>
+            <param name="playerId">The player ID</param>
+            <param name="gameId">The game ID to join</param>
+        </member>
+        <member name="M:GuessMyNumber.Provider.IGameProvider.GetGame(System.String,System.String)">
+            <summary>
+            Gets the game status for a game and a player
+            </summary>
+            <param name="playerId">The player ID</param>
+            <param name="gameId">The game ID</param>
+        </member>
+        <member name="M:GuessMyNumber.Provider.IGameProvider.GetCurrentGames(System.String)">
+            <summary>
+            Get the current games for a player (not finished)
+            </summary>
+            <param name="playerId">The player ID</param>
+        </member>
+        <member name="M:GuessMyNumber.Provider.IGameProvider.GetJoinableGames(System.String)">
+            <summary>
+            Get the games that can be joined for a player
+            </summary>
+            <param name="playerId">The player ID</param>
+        </member>
+        <member name="M:GuessMyNumber.Provider.IGameProvider.GetJoinedGames(System.String)">
+            <summary>
+            Get the games to which the player is already joined
+            </summary>
+            <param name="playerId">The player ID</param>
+        </member>
+        <member name="M:GuessMyNumber.Provider.IGameProvider.GetPastGames(System.String)">
+            <summary>
+            Get the games the player has been on
+            </summary>
+            <param name="playerId">The player ID</param>
+        </member>
+        <member name="M:GuessMyNumber.Provider.IGameProvider.Play(System.String,System.String,System.String)">
+            <summary>
+            Play the game (1 try for guesser)
+            </summary>
+            <param name="playerId">Player ID</param>
+            <param name="number">Gussing Number</param>
+        </member>
+        <member name="M:GuessMyNumber.Provider.IGameProvider.Abandon(System.String,System.String)">
+            <summary>
+            Abandon the game
+            </summary>
+        </member>
+        <member name="M:GuessMyNumber.Provider.IGameProvider.GetGame(System.String)">
+            <summary>
+            Get a game info
+            </summary>
+        </member>
+        <member name="M:GuessMyNumber.Provider.IGameProvider.GetStatsForPlayer(System.String)">
+            <summary>
+            Get a player statistics
+            </summary>
+            <param name="playerId">The player id</param>
+        </member>
+    </members>
+</doc>

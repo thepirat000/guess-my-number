@@ -1,0 +1,438 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+:root {
+    --size: 0;
+}
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+nav button {
+    margin-right: .7em;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px; /* Vertically center the text there */
+}
+
+ul#messages {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    height: 9em;
+    overflow-y: auto;
+    width: 100%;
+    line-height: 1.2em;
+}
+
+ul#messages li {
+    margin: 0;
+    padding: 0;
+}
+
+ul#messages li p {
+    margin: 0;
+    padding: 0;
+}
+
+.input-text {
+    display: inline-block;
+    font-size: large;
+    border: 1px solid grey;
+    background: #f1f1f1;
+    margin: 0 auto;
+    padding: 0px 0px 0px 5px;
+}
+
+#message {
+    width: calc(100% - 55px);
+    float: left; 
+}
+
+.input-button {
+    display: inline-block;
+    font-size: large;
+    border: 1px solid grey;
+    margin: 0 auto;
+    background: #2196F3;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+}
+
+#send {
+    width: 50px;
+    float: right;
+    display: inline-block;
+}
+
+.input-button:hover {
+    background: #0b7dda;
+}
+
+#msg-output-div {
+    border: 1px solid grey;
+    margin: 0px 0px 10px 0px;
+    width: calc(100% - 85px);
+    display: inline-block;
+    background-color: #f1f1f1;
+}
+
+#connected-users-div {
+    border: 1px solid grey;
+    width: 80px;
+    display: inline-block;
+    vertical-align: top;
+    height: 9em;
+    background-color: #f1f1f1;
+}
+
+
+ul#connected-users {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    min-height: 5em;
+    max-height: 10em;
+    overflow-y: auto;
+    width: 100%;
+}
+
+ul#connected-users li {
+    margin: 0;
+    font-weight: bold;
+    font-size: small;
+}
+
+ul#connected-users li p {
+    margin: 0;
+    padding: 0;
+}
+
+.game-info {
+    border: 1px solid grey;
+    display: none;
+    float: left;
+    overflow: hidden;
+    max-width: calc(50% - 5px);
+    min-width: 200px;
+}
+
+#host-game-div {
+    margin-right: 10px;
+}
+
+.big-number {
+    font-size: x-large;
+    font-weight: bold;
+    margin-bottom: 0.15em;
+}
+
+tr.jsgrid-header-row,
+tr.jsgrid-row,
+tr.jsgrid-alt-row {
+    height: 1rem;
+    line-height: 1em;
+    font-size: small;
+}
+
+tr.jsgrid-nodata-row {
+    display: none;
+}
+
+th.jsgrid-header-cell {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+td.jsgrid-cell {
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+#guess-title,
+#host-title {
+    font-size: small;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    height: 1.5em;
+}
+
+#host-title {
+    background-color: wheat;
+}
+
+#guess-title {
+    background-color: skyblue;
+}
+
+
+#host-game-id,
+#guess-game-id {
+    font-size: larger;
+    font-weight: bold;
+}
+
+#games-div {
+    width: 100%;
+    display: inline-block;
+}
+
+main {
+    display: inline-block;
+    width: 100%;
+}
+
+#messages-chat-div {
+    width: 100%;
+}
+
+#host-close,
+#guess-close {
+    float: right;
+    margin-right: 0.5em;
+    font-weight: bold;
+    vertical-align: top;
+}
+
+#host-status,
+#guess-status {
+    font-weight: bold;
+    font-size: large;
+}
+
+#messages-div {
+    margin-bottom: 0.2em;
+}
+
+#guess-footer-div,
+#host-footer-div {
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    font-size: small;
+    height: 1.8em;
+}
+
+.small-text {
+    font-size: x-small;
+}
+
+.monospaced-text {
+    font-family: monospace;
+}
+
+.input-button:disabled,
+.input-button[disabled] {
+    display: inline-block;
+    border: 1px solid grey;
+    margin: 0 auto;
+    background: lightgray;
+    color: white;
+    cursor: not-allowed;
+}
+
+#play-div {
+    float: right;
+    display: inline-block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#play-number {
+    width: 3.5em;
+    font-family: monospace;
+    height: 1.5em;
+    vertical-align: middle;
+}
+
+.footer-button {
+    font-size: small;
+    height: 2em;
+    width: 5em;
+}
+
+#host-header-div,
+#guess-header-div {
+    height: 2em;
+}
+
+#host-header-table,
+#guess-header-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+#guess-header-table td,
+#host-header-table td {
+    vertical-align: middle;
+}
+
+#host-header-table {
+    background-color: cornsilk;
+}
+
+#guess-header-table {
+    background-color: aliceblue;
+}
+    
+
+#host-footer-table,
+#guess-footer-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+#guess-footer-table td,
+#host-footer-table td {
+    vertical-align: middle;
+}
+
+.play-button {
+    width: 3em;    
+}
+
+.start-button {
+    width: 4em;
+}
+
+#guess-game-id,
+#host-game-id {
+    margin-left: 0.5em;
+}
+
+#guess-status,
+#host-status {
+    margin-right: 0.5em;
+}
+
+.btn:disabled,
+.btn[disabled] {
+    color: lightgray;
+    opacity: 0.3;
+}
+
+#new-game-number {
+    width: 4em;
+}
+
+#new-game-maxtries {
+    width: 2em;
+}
+
+.float-right {
+    float: right;
+    margin-right: .5em;
+}
+
+#new-host-table,
+#new-host-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+#new-host-table td,
+#new-host-table td {
+    vertical-align: middle;
+}
+
+#host-game-users {
+    font-size: x-small;
+}
+
+.win-count {
+    color: darkgreen;
+    font-weight: bold;
+    font-size: large;
+}
+
+.lost-count {
+    color: darkred;
+    font-weight: bold;
+    font-size: large;
+}
+
+.win-count-small {
+    color: darkgreen;
+    font-weight: bold;
+}
+
+.lost-count-small {
+    color: darkred;
+    font-weight: bold;
+}

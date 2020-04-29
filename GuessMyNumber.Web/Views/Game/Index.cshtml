@@ -1,0 +1,219 @@
+﻿@using GuessMyNumber.Web.Models;
+
+@model PlayerGameModel
+
+@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+    ViewBag.Title = "Guess My Number";
+}
+
+<input type="hidden" id="username" value="@Model.Player.Username" />
+<input type="hidden" id="firstname" value="@Model.Player.FirstName" />
+<input type="hidden" id="postCommand" value="@Model.PostCommand" />
+<input type="text" id="clipboard-input" style="display:none;">
+
+<div id="messages-div">
+    <div id="msg-send-div" style="width: 100%; display: inline-block;">
+        <input id="message" type="text" class="input-text" autocomplete="off" placeholder="Type your message or command here..." />
+        <button id="send" type="button" class="btn btn-sm btn-primary">Send</button>
+    </div>
+
+    <div style="width: 100%;">
+        <label style="font-size: small; height: 1em;">Messages</label>
+        <label style="font-size: small; float: right; margin-right: 50px; height: 1em;">Users</label>
+    </div>
+    <div id="messages-chat-div">
+        <div id="msg-output-div">
+
+            <ul id="messages">
+            </ul>
+        </div>
+
+        <div id="connected-users-div">
+            <ul id="connected-users">
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="games-div">
+    <div id="host-game-div" class="game-info">
+        <div id="host-title">
+            <span>Hosting</span>
+            <a id="host-close" class="host-close-button" href="close" target="_blank">X</a>
+        </div>
+        <div id="host-header-div">
+            <table id="host-header-table">
+                <tr>
+                    <td>
+                        <div id="host-game-id"></div>
+                    </td>
+                    <td style="text-align: center;">
+                        <span id='host-number-container' style='display:none'></span>
+                        <span id='host-number' class='big-number'></span>
+                    </td>
+                    <td style="text-align: right;">
+                        <div id="host-status"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="host-tries" style="margin-top: 5px; display: inline-block;">
+            <div id="host-jsGrid">
+            </div>
+        </div>
+        <div id="host-footer-div">
+            <table id="host-footer-table">
+                <tr>
+                    <td>
+                        <span id="host-next-turn"></span>
+                    </td>
+                    <td style="text-align: center;">
+                        <span id="host-game-users"></span>
+                    </td>
+                    <td style="text-align: right;">
+                        <span id="host-tries-left"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="host-buttons-div" class="centered-buttons-container">
+            <button id="host-start-button" class="btn btn-sm btn-primary start-button">Start</button>
+            <button id="host-abandon-button" class="btn btn-sm btn-primary abandon-button">Abandon</button>
+
+            <div id="dropdown-invite" class="btn-group dropup">
+                <button type="button" class="invite-button btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-share-alt"></i> Invite
+                </button>
+                <div class="dropdown-menu">
+                    <button class="dropdown-item" type="button" id="host-invite-whatsapp-button"><i class="fa fa-whatsapp"></i> WhatsApp</button>
+                    <button class="dropdown-item" type="button" id="host-invite-link-button"><i class="fa fa-link"></i> Link</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="guess-game-div" class="game-info">
+        <div id="guess-title">
+            <span>Guessing</span>
+            <a id="guess-close" class="guess-close-button" href="close" target="_blank">X</a>
+        </div>
+        <div id="guess-header-div">
+            <table id="guess-header-table">
+                <tr>
+                    <td>
+                        <div id="guess-game-id"></div>
+                    </td>
+                    <td style="text-align: center;">
+                        <div id="guess-digits"></div>
+                    </td>
+                    <td style="text-align: right;">
+                        <div id="guess-status"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="guess-tries" style="margin-top: 5px; display: inline-block;">
+            <div id="guess-jsGrid">
+            </div>
+        </div>
+        <div id="guess-footer-div">
+            <table id="guess-footer-table">
+                <tr>
+                    <td>
+                        <span id="guess-next-turn"></span>
+                    </td>
+                    <td style="text-align: center;">
+                        <span id="guess-tries-left"></span>
+                    </td>
+                    <td style="text-align: right;">
+                        <span id="guess-host-player"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="guess-buttons-div">
+            <button id="guess-start-button" class="btn btn-sm btn-primary start-button">Start</button>
+            <button id="guess-abandon-button" class="btn btn-sm btn-primary abandon-button">Abandon</button>
+            <div id="play-div">
+                <input id="play-number" type="number" />
+                <button id="guess-play-button" class="btn btn-sm btn-success play-button">Play</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="modal-div" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="dialog-title" class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div id="dialog-body" class="modal-body">
+                <span id="dialog-body-text"></span>
+                <div id="dialog-jsGrid">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="new-game-modal-button" type="button" class="btn btn-primary" data-dismiss="modal">New game</button>
+                <button id="close-modal-button" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-new-host-game" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Host a new game</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body" id="new-host-game-body">
+                <table id="new-host-table">
+                    <tr>
+                        <td>
+                            <label class="float-right" for="new-game-number">Number</label>
+                        </td>
+                        <td>
+                            <input id="new-game-number" name="new-game-number" type="number" value="" class="big-number" maxlength="5" min="0" width="10" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="float-right" for="new-game-maxtries">Max tries</label>
+                        </td>
+                        <td>
+                            <input id="new-game-maxtries" name="new-game-maxtries" type="number" value="" class="big-number" maxlength="2" min="0" max="20" width="4" />
+                            <input id="new-host-unlimited-tries" name="unlimited-tries" type="checkbox" value="UnlimitedTries" checked />
+                            <label for="unlimited-tries">Unlimited tries</label><br>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="create-host-game-button" type="button" class="btn btn-primary" data-dismiss="modal">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Bootstrap Modal -->
+
+@section Scripts
+{
+    <script src="~/lib/showdown/dist/showdown.js"></script>
+    <script src="~/js/signalr.js"></script>
+    <script src="~/js/chat.js"></script>
+    <script src="~/js/gameHost.js"></script>
+    <script src="~/js/gameGuess.js"></script>
+    <script src="~/js/popupGame.js"></script>
+}
