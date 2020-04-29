@@ -44,6 +44,8 @@ namespace GuessMyNumber.Web
 
             // configure DI for application services
             services.AddSingleton<IGameProvider, GameProvider>();
+
+            services.AddHttpsRedirection(o => o.HttpsPort = 443);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

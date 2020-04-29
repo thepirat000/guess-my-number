@@ -21,6 +21,15 @@ connection.start()
     .then(function () {
         console.log("connected");
 
+        // Execute post load command (if any)
+        let postCommand = $("#postCommand").val();
+        if (postCommand) {
+            window.history.pushState({}, document.title, window.location.pathname);
+            sendMessageToServer(postCommand);
+            $("#postCommand").val('');
+        }
+
+
         connection.invoke('getConnectionId')
             .then(function (connectionId) {
                 sessionStorage.setItem('conectionId', connectionId);
@@ -416,11 +425,6 @@ $(document).ready(function () {
         loadGuessGame(currentGuessGame);
     }
 
-    let postCommand = $("#postCommand").val()
-    if (postCommand) {
-        window.history.pushState({}, document.title, window.location.pathname);
-        sendMessageToServer(postCommand);
-    }
 });
 
 function copyToClipboard(text) {
