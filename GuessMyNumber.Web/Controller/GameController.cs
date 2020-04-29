@@ -47,8 +47,21 @@ namespace GuessMyNumber.Web.Controller
                 }
 
                 // User can load
-                var player = game.PlayersDict[username];
-                if (player == null)
+				if (game.PlayersDict.ContainsKey(username))
+				{
+					var player = game.PlayersDict[username];
+					if (player.Role == Role.Host)
+                    {
+                        // player is hosting, just load
+                        postCommand = "/host " + game.GameId;
+                    }
+                    else if (player.Role == Role.Guesser)
+                    {
+                        // player already joined as guesser
+                        postCommand = "/guess " + game.GameId;
+                    }
+				}
+                else 
                 {
                     if (game.Status != GameStatus.Created)
                     {
@@ -58,19 +71,6 @@ namespace GuessMyNumber.Web.Controller
                     {
                         // player can join
                         postCommand = "/join " + game.GameId;
-                    }
-                }
-                else
-                {
-                    if (player.Role == Role.Host)
-                    {
-                        // player is hosting, just load
-                        postCommand = "/host " + game.GameId;
-                    }
-                    else if (player.Role == Role.Guesser)
-                    {
-                        // player already joined as guesser
-                        postCommand = "/guess " + game.GameId;
                     }
                 }
             }
