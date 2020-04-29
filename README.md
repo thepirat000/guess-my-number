@@ -1,2 +1,2 @@
 # guess-my-number
-A simple number guessing logic game 
+A simple _number guessing_ logic game 
