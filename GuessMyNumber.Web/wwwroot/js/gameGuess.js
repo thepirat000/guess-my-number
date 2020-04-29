@@ -16,8 +16,9 @@
     // Make tries grid
     let data = model.playerTries;
     $("#guess-jsGrid").jsGrid({
-        height: 200,
+        height: "auto",
         width: "100%",
+        noDataContent: "<span style='color: darkgray; font-style: italic;'>No guesses</span>",
         autoload: true,
         inserting: false,
         editing: false,
@@ -70,6 +71,7 @@ function setGuessGameStatus(game) {
     }
     let statusText = status === 0 ? "New" : status === 1 ? "Playing" : isWinner ? "Winner" : "Loser";
     
+    $("#guess-status-id").val(game.status);
     $("#guess-status").text(statusText);
     $("#guess-status").css('color', color);
     $("#guess-tries-left").toggle(status === 1);

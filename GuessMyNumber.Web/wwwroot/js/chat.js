@@ -2,6 +2,8 @@
 
 document.body.addEventListener('input', enforce_maxlength);
 
+new ClipboardJS('.btn-copy-clipboard');
+
 function enforce_maxlength(event) {
     var t = event.target;
     if (t.hasAttribute('maxlength')) {
@@ -240,7 +242,7 @@ function setCurrentHostGame(gameId) {
     localStorage.setItem('current-host-gameId', gameId);
 }
 function hideCurrentHostGame() {
-    if ($("#host-status").text() === gameStatuses[2]) {
+    if ($("#host-status-id").val() === "2") {
         localStorage.removeItem('current-host-gameId');
     }
     $("#host-game-div").hide('fast');
@@ -253,7 +255,7 @@ function setCurrentGuessGame(gameId) {
     localStorage.setItem('current-guess-gameId', gameId);
 }
 function hideCurrentGuessGame() {
-    if ($("#guess-status").text() === gameStatuses[2]) {
+    if ($("#guess-status-id").val() === "2") {
         localStorage.removeItem('current-guess-gameId');
     }
     $("#guess-game-div").hide('fast');
@@ -426,14 +428,6 @@ $(document).ready(function () {
     }
 
 });
-
-function copyToClipboard(text) {
-    $("#clipboard-input").val(text);
-    var copyText = document.getElementById("clipboard-input");
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); /*For mobile devices*/
-    document.execCommand("copy");
-}
 
 function loadHostGame(gameId) {
     $.ajax("/Game/GameAsHost?gameId=" + gameId, {

@@ -6,7 +6,8 @@ function showPopupPlayerStats(data) {
     $("#dialog-jsGrid").empty();
     let currentUser = $("#username").val();
 
-    data.forEach(g => {
+    let gridData = [...data];
+    gridData.forEach(g => {
         g.wonAsGuess = g.wonAsGuess === 0 ? '-' : g.wonAsGuess;
         g.lostAsGuess = g.lostAsGuess === 0 ? '-' : g.lostAsGuess;
         g.wonAsHost = g.wonAsHost === 0 ? '-' : g.wonAsHost;
@@ -15,6 +16,7 @@ function showPopupPlayerStats(data) {
         g.totalLost = g.totalLost === 0 ? '-' : g.totalLost;
     });
 
+    $("#dialog-jsGrid").jsGrid("destroy");
     $("#dialog-jsGrid").jsGrid({
         height: "auto",
         width: "100%",
@@ -23,7 +25,7 @@ function showPopupPlayerStats(data) {
         editing: false,
         controller: {
             loadData: function () {
-                return data;
+                return gridData;
             }
         },
         fields: [
@@ -54,7 +56,8 @@ function showPopupGame(popupType, text) {
     $.ajax("/Game/GetLoadableGames?type=" + popupType, {
         success: function (data) {
 
-            data.forEach(g => {
+            let gridData = [...data];
+            gridData.forEach(g => {
                 let isJoinedAsGuesser = g.players.some(p => p.playerId === currentUser && p.role === 1);
                 g.statusText = gameStatuses[g.status];
                 g.statusColor = getGameStatusColor(gameStatuses[g.status]);
@@ -63,6 +66,7 @@ function showPopupGame(popupType, text) {
                 g.action = g.hostPlayer.playerId === currentUser ? "host" : "guess";
             });
 
+            $("#dialog-jsGrid").jsGrid("destroy");
             $("#dialog-jsGrid").jsGrid({
                 height: 200,
                 width: "100%",
@@ -71,7 +75,7 @@ function showPopupGame(popupType, text) {
                 editing: false,
                 controller: {
                     loadData: function () {
-                        return data;
+                        return gridData;
                     }
                 },
                 fields: [
@@ -101,6 +105,7 @@ function showPopupGame(popupType, text) {
                     $(args.event.currentTarget).find(".game-link").click();
                 }
             });
+
             $("#dialog-jsGrid").show();
             $("#modal-div").modal("show");
 

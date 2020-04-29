@@ -11,25 +11,20 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3 justify-content-between">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index" id="page-title"></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <button type="button" class="btn btn-outline-info" id="header-btn-stats">Players stats</button>
-                        </li>
-                        <li class="nav-item">
-                            <button type="button" class="btn btn-outline-success" id="header-btn-host">Host game</button>
-                        </li>
-                        <li class="nav-item">
-                            <button type="button" class="btn btn-outline-success" id="header-btn-guess">Guess game</button>
-                        </li>
-                    </ul>
+
+                <div class="d-flex justify-content-start flex-row bd-highlight">
+                    <div class="bd-highlight">
+                        <button type="button" class="btn btn-outline-info" id="header-btn-stats">Players stats</button>
+                    </div>
+                    <div class="bd-highlight">
+                        <button type="button" class="btn btn-outline-success" id="header-btn-host">Host game</button>
+                    </div>
+                    <div class="bd-highlight">
+                        <button type="button" class="btn btn-outline-success" id="header-btn-guess">Guess game</button>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -50,6 +45,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/clipboard.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/timeago.js"></script>
 

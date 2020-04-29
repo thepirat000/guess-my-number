@@ -1,7 +1,9 @@
 ﻿function showGameAsHost(model) {
     $("#host-game-id").text(model.game.gameId);
-    $("#host-number-container").text(model.gameNumber)
+    $("#host-number-container").text(model.gameNumber);
+    $("#host-max-tries").val(model.game.maxTries);
     $("#host-number").text("• ".repeat(model.game.digits).trim());
+    $("dropdown-invite").toggle(model.game.status === 0);
 
     setHostNextTurnOrWinner(model.game);
     setHostGameStatus(model.game);
@@ -17,8 +19,9 @@
     // Make tries grid
     let data = model.playerTries;
     $("#host-jsGrid").jsGrid({
-        height: 200,
+        height: "auto",
         width: "100%",
+        noDataContent: "<span style='color: darkgray; font-style: italic;'>No guesses</span>",
         autoload: true,
         inserting: false,
         editing: false,
@@ -62,9 +65,11 @@ function setHostGameStatus(game) {
         }
     }
     let statusText = status === 0 ? "New" : status === 1 ? "Playing" : isWinner ? "Winner" : "Loser";
+    $("#host-status-id").val(game.status);
     $("#host-status").text(statusText);
     $("#host-status").css('color', color);
     $("#host-tries-left").toggle(status === 1);
+    $("#dropdown-invite").toggle(game.status === 0);
 }
 
 function addTryToHostedGame(number, playerId, tryNumber, answer) {
@@ -122,7 +127,6 @@ function showHostGameUsers(game) {
     } else {
         $("#host-game-users").text(players);
     }
-    
 }
 
 
@@ -146,11 +150,8 @@ $(document).ready(function () {
     });
 
     $("#host-invite-whatsapp-button").on('click', event => {
-        let hostGameId = getCurrentHostGame();
-        let firstName = $("#firstname").val();
-        let link = getInviteLink(hostGameId);
-        if (link) {
-            let msg = "You've been invited to game " + hostGameId + " by " + firstName + ". Join with the following link: " + link;
+        let msg = getInviteMessage();
+        if (msg) {
             window.open('https://wa.me/?text=' + encodeURI(msg));
         }
         event.preventDefault();
@@ -159,8 +160,8 @@ $(document).ready(function () {
         let hostGameId = getCurrentHostGame();
         let link = getInviteLink(hostGameId);
         if (link) {
-            copyToClipboard(link);
-            showPopupMessage('Invite', 'Link copied to clipboard: <div>' + link + '</div>', false);
+            let copyButtonHtml = '<button class="btn-copy-clipboard" data-clipboard-target="#invite-link-input"><i class="fa fa-copy"></i></button>';
+            showPopupMessage('Invite', "<div>Copy invite link to clipboard</div> <div><input id='invite-link-input' type='text' value='" + link + "' />" + copyButtonHtml + "</div>", false);
         }
         event.preventDefault();
     });
@@ -191,6 +192,21 @@ $(document).ready(function () {
     });
 
 });
+
+function getInviteMessage() {
+    let hostGameId = getCurrentHostGame();
+    if (hostGameId) {
+        let firstName = $("#firstname").val();
+        let link = getInviteLink(hostGameId);
+        let digits = $("#host-number-container").text().trim().length;
+        let maxTries = $("#host-max-tries").val();
+        let maxTriesText = maxTries ? " with a maximum of " + maxTries + " tries" : "";
+        let msg = "You've been invited to a " + digits + " digits game " + hostGameId + " by " + firstName + maxTriesText + ". Join with the following link: " + link;
+        return msg;
+    } else {
+        return null;
+    }
+}
 
 function getInviteLink(hostGameId) {
     if (hostGameId) {

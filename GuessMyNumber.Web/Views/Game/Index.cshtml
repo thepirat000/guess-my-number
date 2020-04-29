@@ -14,7 +14,7 @@
 
 <div id="messages-div">
     <div id="msg-send-div" style="width: 100%; display: inline-block;">
-        <input id="message" type="text" class="input-text" autocomplete="off" placeholder="Type your message or command here..." />
+        <input id="message" type="text" class="input-text" autocomplete="off" />
         <button id="send" type="button" class="btn btn-sm btn-primary">Send</button>
     </div>
 
@@ -22,24 +22,25 @@
         <label style="font-size: small; height: 1em;">Messages</label>
         <label style="font-size: small; float: right; margin-right: 50px; height: 1em;">Users</label>
     </div>
-    <div id="messages-chat-div">
-        <div id="msg-output-div">
-
+    <div id="messages-chat-div" class="flex-msg-container">
+        <div id="msg-output-div" class="flex-msg-item">
             <ul id="messages">
             </ul>
         </div>
 
-        <div id="connected-users-div">
+        <div id="connected-users-div" class="flex-msg-item">
             <ul id="connected-users">
             </ul>
         </div>
     </div>
 </div>
 
-<div id="games-div">
-    <div id="host-game-div" class="game-info">
+<div id="games-div" class="flex-game-info-container">
+
+    <!-- HOST game -->
+    <div id="host-game-div" class="flex-game-info-item">
         <div id="host-title">
-            <span>Hosting</span>
+            <span class="game-title-text">Hosting</span>
             <a id="host-close" class="host-close-button" href="close" target="_blank">X</a>
         </div>
         <div id="host-header-div">
@@ -53,6 +54,7 @@
                         <span id='host-number' class='big-number'></span>
                     </td>
                     <td style="text-align: right;">
+                        <input type="hidden" id="host-status-id" />
                         <div id="host-status"></div>
                     </td>
                 </tr>
@@ -72,6 +74,7 @@
                         <span id="host-game-users"></span>
                     </td>
                     <td style="text-align: right;">
+                        <input type="hidden" id="host-max-tries" />
                         <span id="host-tries-left"></span>
                     </td>
                 </tr>
@@ -95,9 +98,10 @@
 
     </div>
 
-    <div id="guess-game-div" class="game-info">
+    <!-- GUESS game -->
+    <div id="guess-game-div" class="flex-game-info-item">
         <div id="guess-title">
-            <span>Guessing</span>
+            <span class="game-title-text">Guessing</span>
             <a id="guess-close" class="guess-close-button" href="close" target="_blank">X</a>
         </div>
         <div id="guess-header-div">
@@ -110,6 +114,7 @@
                         <div id="guess-digits"></div>
                     </td>
                     <td style="text-align: right;">
+                        <input type="hidden" id="guess-status-id" />
                         <div id="guess-status"></div>
                     </td>
                 </tr>
