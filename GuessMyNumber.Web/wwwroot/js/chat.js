@@ -12,6 +12,8 @@ function enforce_maxlength(event) {
 }
 
 const connection = new signalR.HubConnectionBuilder().withUrl("/gameHub").build();
+const chat_history_entries = 50;
+const chat_history_hours = 4;
 let converter = new showdown.Converter();
 let cmdStack = [];
 let cmdBackStack = [];
@@ -22,7 +24,6 @@ let _connectedUsers;
 connection.start()
     .then(function () {
         console.log("connected");
-
         // Execute post load command (if any)
         let postCommand = $("#postCommand").val();
         if (postCommand) {
@@ -30,8 +31,6 @@ connection.start()
             sendMessageToServer(postCommand);
             $("#postCommand").val('');
         }
-
-
         connection.invoke('getConnectionId')
             .then(function (connectionId) {
                 sessionStorage.setItem('conectionId', connectionId);
@@ -49,6 +48,31 @@ connection.on("ReceiveUserMessage", function (user, message) {
 connection.on("ReceiveServerMessage", function (message) {
     appendLine(null, message);
 });
+
+function saveChatHistory() {
+    // Store last messages on local storage
+    let chatHistory = '';
+    $('#messages li:gt(-' + (chat_history_entries + 1) + ')').each(function () { chatHistory += this.outerHTML; });
+    localStorage.setItem('chat-history', JSON.stringify({ date: new Date(), html: chatHistory }));
+}
+
+function restoreChatHistory() {
+    let chatHistory = localStorage.getItem('chat-history');
+    if (chatHistory) {
+        let ch = JSON.parse(chatHistory);
+        let hoursDiff = (new Date() - new Date(ch.date)) / 1000 / 60 / 60;
+        if (hoursDiff > 0 && hoursDiff <= chat_history_hours) {
+            $("#messages").append(ch.html);
+        } else {
+            localStorage.removeItem('chat-history');
+        }
+    }
+}
+
+function clearChatHistory() {
+    $("#messages").empty();
+    localStorage.removeItem('chat-history');
+}
 
 function showStartMessage(game) {
     let gameId = game.gameId;
@@ -316,6 +340,11 @@ function preProcessMessage(message) {
         }
         return null;
     }
+    // - Clear chat window
+    else if (message.toLowerCase().startsWith("/clear")) {
+        clearChatHistory();
+        return null;
+    }
 
     return message;
 }
@@ -325,11 +354,8 @@ function appendLine(user, line) {
     let html = converter.makeHtml(line);
     li.innerHTML = html;
     document.getElementById('messages').appendChild(li);
+    saveChatHistory();
     $('#messages').scrollTop($('#messages')[0].scrollHeight);
-}
-
-function clearMessages() {
-    $("messages").clear();
 }
 
 $(document).ready(function () {
@@ -427,6 +453,7 @@ $(document).ready(function () {
         loadGuessGame(currentGuessGame);
     }
 
+    restoreChatHistory();
 });
 
 function loadHostGame(gameId) {
