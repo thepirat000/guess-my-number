@@ -89,19 +89,19 @@ function setWinGuessedGame(playGameResponse, number) {
     // Guessed game won
     setGuessNextTurnOrWinner(playGameResponse.game);
     let msg = "You've won the game " + playGameResponse.game.gameId + " as guesser in " + playGameResponse.answer.tryNumber + " tries. Correct number was " + number;
-    showPopupMessage("Winner", msg, true);
+    showPopupMessage("Winner", msg, true, true);
 }
 function setLoseGuessedGame(playGameResponse) {
     // Guessed game loss
     setGuessNextTurnOrWinner(playGameResponse.game);
     let msg = "You've lost the game " + playGameResponse.game.gameId + " hosted by " + playGameResponse.game.hostPlayer.playerId + " winner is " + playGameResponse.game.winnerPlayerId;
-    showPopupMessage("Loser", msg, true);
+    showPopupMessage("Loser", msg, true, true);
 }
 function setAbandonedGuessedGame(gameResponse) {
     // Guessed game loss
     setGuessNextTurnOrWinner(gameResponse.game);
     let msg = "You've abandoned the game " + gameResponse.game.gameId;
-    showPopupMessage("Loser", msg, true);
+    showPopupMessage("Loser", msg, true, true);
 }
 
 function setGuessNextTurnOrWinner(game) {

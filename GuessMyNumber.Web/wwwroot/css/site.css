@@ -97,7 +97,7 @@ ul#messages {
     overflow-y: auto;
     width: 100%;
     line-height: 1.2em;
-    height: 10em;
+    height: inherit;
 }
 
 ul#messages li {
@@ -121,7 +121,7 @@ ul#messages li p {
 
 #message {
     width: calc(100% - 55px);
-    float: left; 
+    float: left;
 }
 
 .input-button {
@@ -151,6 +151,8 @@ ul#messages li p {
     width: calc(100% - 85px);
     display: inline-block;
     background-color: #f1f1f1;
+    height: inherit;
+    min-height: 160px;
 }
 
 #connected-users-div {
@@ -167,7 +169,6 @@ ul#connected-users {
     margin: 0;
     padding: 0;
     min-height: 5em;
-    max-height: 10em;
     overflow-y: auto;
     width: 100%;
 }
@@ -252,6 +253,7 @@ main {
 
 #messages-chat-div {
     width: 100%;
+    height: inherit;
 }
 
 #host-close,

@@ -10,12 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="wwwroot\js\chat.js">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\GuessMyNumber\GuessMyNumber.API.csproj" />
   </ItemGroup>
 

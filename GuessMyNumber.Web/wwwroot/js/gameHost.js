@@ -77,23 +77,23 @@ function addTryToHostedGame(number, playerId, tryNumber, answer) {
     });
 }
 
+// Hosted game won
 function setWinHostedGame(playGameResponse, number) {
-    // Hosted game won
     setHostNextTurnOrWinner(playGameResponse.game);
     let msg = "You've won the game " + playGameResponse.game.gameId + " as host. Correct number was " + number;
-    showPopupMessage("Winner", msg, true);
+    showPopupMessage("Winner", msg, true, true);
 }
+// Hosted game loss
 function setLoseHostedGame(playGameResponse, number) {
-    // Hosted game loss
     setHostNextTurnOrWinner(playGameResponse.game);
     let msg = "You've lost the game " + playGameResponse.game.gameId + " against " + playGameResponse.playerId + ". Correct number was " + number + " guessed in " + playGameResponse.answer.tryNumber + " tries";
-    showPopupMessage("Loser", msg, true);
+    showPopupMessage("Loser", msg, true, true);
 }
+// Hosted game abandon
 function setAbandonedHostedGame(gameResponse) {
-    // Hosted game loss
     setHostNextTurnOrWinner(gameResponse.game);
     let msg = "You've abandoned the game " + gameResponse.game.gameId;
-    showPopupMessage("Loser", msg, true);
+    showPopupMessage("Loser", msg, true, true);
 }
 
 function setHostNextTurnOrWinner(game) {

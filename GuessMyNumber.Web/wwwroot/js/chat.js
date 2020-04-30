@@ -1,4 +1,4 @@
-﻿"use strict";
+"use strict";
 
 document.body.addEventListener('input', enforce_maxlength);
 
@@ -63,6 +63,7 @@ function restoreChatHistory() {
         let hoursDiff = (new Date() - new Date(ch.date)) / 1000 / 60 / 60;
         if (hoursDiff > 0 && hoursDiff <= chat_history_hours) {
             $("#messages").append(ch.html);
+            scrollMessages();
         } else {
             localStorage.removeItem('chat-history');
         }
@@ -355,11 +356,13 @@ function appendLine(user, line) {
     li.innerHTML = html;
     document.getElementById('messages').appendChild(li);
     saveChatHistory();
-    $('#messages').scrollTop($('#messages')[0].scrollHeight);
+    scrollMessages();
 }
 
 $(document).ready(function () {
     $("#page-title").text($("#firstname").val());
+
+    makeMessagesResizable();
 
     $('#message').keypress(function (e) {
         if (e.which === 13) {
@@ -452,9 +455,23 @@ $(document).ready(function () {
         // Load guess game
         loadGuessGame(currentGuessGame);
     }
-
     restoreChatHistory();
+   
 });
+
+function makeMessagesResizable() {
+    $("#messages-chat-div").resizable({
+        minHeight: 160,
+        handles: "s, se",
+        resize: function (event, ui) {
+            $(this).css("width", '');
+        }
+    });
+}
+
+function scrollMessages() {
+    $('#messages').scrollTop($('#messages')[0].scrollHeight);
+}
 
 function loadHostGame(gameId) {
     $.ajax("/Game/GameAsHost?gameId=" + gameId, {
@@ -497,12 +514,13 @@ function showStatsPlayers(players) {
     });
 }
 
-function showPopupMessage(title, message, showNewGame) {
+function showPopupMessage(title, message, showNewGame, showPlayerStats) {
     $("#dialog-jsGrid").empty();
     $("#dialog-jsGrid").hide();
     $("#dialog-title").text(title);
     $("#dialog-body-text").html(message);
     $("#new-game-modal-button").toggle(showNewGame);
+    $("#player-stats-modal-button").toggle(showPlayerStats);
     $("#modal-div").modal("show");
     $("#close-modal-button").focus();
 }
