@@ -4,6 +4,8 @@ document.body.addEventListener('input', enforce_maxlength);
 
 new ClipboardJS('.btn-copy-clipboard');
 
+navigator.serviceWorker.register('/js/sw.js');
+
 function enforce_maxlength(event) {
     var t = event.target;
     if (t.hasAttribute('maxlength')) {
@@ -615,7 +617,7 @@ function canNotify() {
 function notify(title, msg) {
     if (document.body.className === "hidden") {
         if (canNotify()) {
-            let notification = displayNotification(title, msg, window.location.origin + window.location.pathname);
+            displayNotification(title, msg);
         }
     }
 }
@@ -623,7 +625,7 @@ function notify(title, msg) {
 let lastNotificationShownDate = new Date(2000, 0, 1);
 
 function displayNotification(title, body, link, duration) {
-    link = link || null; // Link is optional
+    link = link || null;
     duration = duration || 5000;
     let msDiff = new Date() - lastNotificationShownDate;
     if (msDiff < duration) {
@@ -632,17 +634,26 @@ function displayNotification(title, body, link, duration) {
     let options = {
         body: body
     };
-    let n = new Notification(title, options);
-    if (link) {
-        n.onclick = function () {
-            window.open(link);
-        };
-    }
-    if (duration) {
-        setTimeout(n.close.bind(n), duration);
+    if (platform.os.family === "Android") {
+        navigator.serviceWorker.getRegistrations().then(function (registrations) { registrations[0].showNotification(title, options) })
+    } else {
+        let n = new Notification(title, options);
+        if (link) {
+            n.onclick = function (event) {
+                event.preventDefault();
+                window.open(link);
+            };
+        } else {
+            n.onclick = function (event) {
+                event.preventDefault();
+                n.close.bind(n);
+            };
+        }
+        if (duration) {
+            setTimeout(n.close.bind(n), duration);
+        }
     }
     lastNotificationShownDate = new Date();
-    return n;
 }
 
 // Visibility change, from https://stackoverflow.com/a/1060034/122195
