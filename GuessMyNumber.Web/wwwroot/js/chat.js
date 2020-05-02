@@ -152,12 +152,10 @@ connection.on("ReceiveCommand", function (user, commandName, parameters, command
                 if (gameResponse.game.gameId === getCurrentHostGame()) {
                     // Current hosted game has started
                     setHostGameStatus(gameResponse.game);
-                    showStartMessage(gameResponse.game);
                     showGameButtons(gameResponse.game, true);
                 } else if (gameResponse.game.gameId === getCurrentGuessGame()) {
                     // Current guessed game has started
                     setGuessGameStatus(gameResponse.game);
-                    showStartMessage(gameResponse.game);
                     showGameButtons(gameResponse.game, false);
                 } else {
                     // Another game has started
@@ -243,6 +241,7 @@ connection.on("ReceiveCommand", function (user, commandName, parameters, command
                     setGuessGameStatus(gameResponse.game);
                     setGuessNextTurnOrWinner(gameResponse.game);
                     showGameButtons(gameResponse.game, true);
+                    
                 } else if (getCurrentHostGame() === gameResponse.game.gameId) {
                     // someone else abandoned the hosted game
                     setHostGameStatus(gameResponse.game);
@@ -263,7 +262,7 @@ connection.on("ReceiveCommand", function (user, commandName, parameters, command
 });
 
 function setCurrentHostGame(gameId) {
-    loadHostGame(gameId);
+    loadHostGame(gameId, null);
     localStorage.setItem('current-host-gameId', gameId);
 }
 function hideCurrentHostGame() {
@@ -276,7 +275,7 @@ function getCurrentHostGame() {
     return localStorage.getItem('current-host-gameId');
 }
 function setCurrentGuessGame(gameId) {
-    loadGuessGame(gameId);
+    loadGuessGame(gameId, null);
     localStorage.setItem('current-guess-gameId', gameId);
 }
 function hideCurrentGuessGame() {
@@ -351,12 +350,25 @@ function preProcessMessage(message) {
 }
 
 function appendLine(user, line) {
-    let li = document.createElement('li');
     let html = converter.makeHtml(line);
-    li.innerHTML = html;
-    document.getElementById('messages').appendChild(li);
+    let date = new Date();
+    let formatDate = date.getFullYear() + "-" + (date.getMonth() < 9 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes());
+    $("<li>").attr('title', formatDate).tooltip({
+        track: true,
+        position: { my: "left left", at: "left left" }
+    }).html(html).appendTo("#messages");
     saveChatHistory();
     scrollMessages();
+}
+
+function getMessageText() {
+    return $("#message").emojioneArea()[0].emojioneArea.getText()
+}
+function setMessageText(text) {
+    return $("#message").emojioneArea()[0].emojioneArea.setText(text);
+}
+function setMessageTextFocus() {
+    return $("#message").emojioneArea()[0].emojioneArea.setFocus();
 }
 
 $(document).ready(function () {
@@ -364,62 +376,74 @@ $(document).ready(function () {
 
     makeMessagesResizable();
 
-    $('#message').keypress(function (e) {
-        if (e.which === 13) {
-            $('#send').click();
-            return false;
-        } 
-    });
-    $('#message').keydown(function (e) {
-        if (e.keyCode === 38) {
-            // up key
-            if (cmdStack.length) {
-                let cmd = cmdStack.pop();
-                cmdBackStack.push(cmd);
-                document.getElementById('message').value = cmd;
+    // Emojine area
+    let emoji = $("#message").emojioneArea({
+        pickerPosition: "top",
+        tonesStyle: "bullet",
+        useSprite: true,
+        shortnames: true,
+        container: "#emoji-container",
+        events: {
+            keydown: function (editor, e) {
+                // If emoji autocomplete is showing, avoid processing the keyboard
+                if ($(".textcomplete-dropdown:visible").length > 0) {
+                    return;
+                }
+                if (e.keyCode === 13) {
+                    $('#send').click();
+                }
+                else if (e.keyCode === 38) {
+                    // up key
+                    if (cmdStack.length) {
+                        let cmd = cmdStack.pop();
+                        cmdBackStack.push(cmd);
+                        setMessageText(cmd);
+                    }
+                    return false;
+                } else if (e.keyCode === 40) {
+                    // down key
+                    if (cmdBackStack.length) {
+                        let cmd = cmdBackStack.pop();
+                        cmdStack.push(cmd);
+                        setMessageText(cmd);
+                    }
+                    return false;
+                }
             }
-            return false;
-        } else if (e.keyCode === 40) {
-            // down key
-            if (cmdBackStack.length) {
-                let cmd = cmdBackStack.pop();
-                cmdStack.push(cmd);
-                document.getElementById('message').value = cmd;
-            }
-            return false;
         }
     });
 
     $('#messages').on("click", '.msg-start-game', function (e) {
         let gameId = $(this).data('game-id');
         sendMessageToServer("/start " + gameId);
-        $('#message').focus();
+        setMessageTextFocus();
         e.preventDefault();
     });
     $('#messages').on("click", '.msg-join-game', function (e) {
         let gameId = $(this).data('game-id');
         sendMessageToServer("/join " + gameId);
-        $('#message').focus();
+        setMessageTextFocus();
         e.preventDefault();
     });
 
     $(".host-close-button").on('click', event => {
         hideCurrentHostGame();
+        setMessageTextFocus();
         event.preventDefault();
     });
     $(".guess-close-button").on('click', event => {
         hideCurrentGuessGame();
+        setMessageTextFocus();
         event.preventDefault();
     });
 
     $("#send").on('click', event => {
-        let message = document.getElementById('message').value;
-        document.getElementById('message').value = '';
+        let message = emoji[0].emojioneArea.getText();
+        setMessageText('').setFocus();
         if (message) {
             cmdStack.push(message);
             sendMessageToServer(message);
         }
-        $("#message").removeAttr('placeholder');
         event.preventDefault();
     });
 
@@ -438,31 +462,45 @@ $(document).ready(function () {
         event.preventDefault();
     });
 
+    $("#player-stats-modal-button").on('click', event => {
+        if (_connectedUsers) {
+            showStatsPlayers(_connectedUsers.join(','));
+        }
+        event.preventDefault();
+    });
+
+
     $("#new-game-modal-button").on('click', event => {
         showNewHostGamePopup();
         event.preventDefault();
     });
 
-    $('#message').focus();
-
     let currentHostGame = getCurrentHostGame();
     if (currentHostGame) {
         // Load host game
-        loadHostGame(currentHostGame);
+        loadHostGame(currentHostGame, () => {
+            setMessageTextFocus();
+        });
     }
     let currentGuessGame = getCurrentGuessGame();
     if (currentGuessGame) {
         // Load guess game
-        loadGuessGame(currentGuessGame);
+        loadGuessGame(currentGuessGame, () => {
+            setMessageTextFocus();
+        });
     }
+
     restoreChatHistory();
-   
+    setMessageTextFocus();
+    $("#messages-div").show();
+    enableNotifications();
 });
 
 function makeMessagesResizable() {
     $("#messages-chat-div").resizable({
         minHeight: 160,
         handles: "s, se",
+        //containment: "parent",
         resize: function (event, ui) {
             $(this).css("width", '');
         }
@@ -473,28 +511,40 @@ function scrollMessages() {
     $('#messages').scrollTop($('#messages')[0].scrollHeight);
 }
 
-function loadHostGame(gameId) {
+function loadHostGame(gameId, callback) {
     $.ajax("/Game/GameAsHost?gameId=" + gameId, {
         success: function (data) {
             showGameAsHost(data);
+            if (callback) {
+                callback();
+            }
         },
         error: function (xhr, status, error) {
             hideCurrentHostGame();
             localStorage.removeItem('current-host-gameId');
             console.error(xhr.responseText);
+            if (callback) {
+                callback();
+            }
         }
     });
 }
 
-function loadGuessGame(gameId) {
+function loadGuessGame(gameId, callback) {
     $.ajax("/Game/GameAsGuess?gameId=" + gameId, {
         success: function (data) {
             showGameAsGuess(data);
+            if (callback) {
+                callback();
+            }
         },
         error: function (xhr, status, error) {
             hideCurrentGuessGame();
             localStorage.removeItem('current-guess-gameId');
             console.error(xhr.responseText);
+            if (callback) {
+                callback();
+            }
         }
     });
 }
@@ -532,5 +582,28 @@ function getGameStatusColor(status) {
 
 function showNewHostGamePopup() {
     $("#new-game-number").val('');
-    $("#modal-new-host-game").modal("show");
+    $("#modal-new-host-game").modal();
+}
+
+function enableNotifications() {
+    if (!("Notification" in window)) {
+        return;
+    }
+    // Let's check whether notification permissions have already been granted
+    if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+        Notification.requestPermission();
+    }
+}
+function canNotify() {
+    if (!("Notification" in window)) {
+        return false;
+    }
+    return Notification.permission === "granted";
+}
+
+function notify(msg) {
+    if (canNotify()) {
+        let notification = new Notification(msg);
+
+    }
 }

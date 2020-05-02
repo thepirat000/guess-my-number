@@ -1,9 +1,9 @@
 ﻿"use strict";
 
 function showPopupPlayerStats(data) {
-    $("#dialog-title").text("Player stats");
-    $("#dialog-body-text").html("");
-    $("#dialog-jsGrid").empty();
+    $("#stats-dialog-body-text").html("");
+    $("#stats-dialog-jsGrid").empty();
+    
     let currentUser = $("#username").val();
 
     let gridData = [...data];
@@ -16,8 +16,8 @@ function showPopupPlayerStats(data) {
         g.totalLost = g.totalLost === 0 ? '-' : g.totalLost;
     });
 
-    $("#dialog-jsGrid").jsGrid("destroy");
-    $("#dialog-jsGrid").jsGrid({
+    $("#stats-dialog-jsGrid").jsGrid("destroy");
+    $("#stats-dialog-jsGrid").jsGrid({
         height: "auto",
         width: "100%",
         autoload: true,
@@ -37,12 +37,13 @@ function showPopupPlayerStats(data) {
             { name: "wonAsHost", title: "Win (host)", width: "20", css: "win-count-small", headercss: "normal-text", align: "center" },
             { name: "lostAsHost", title: "Lost (host)", width: "20", css: "lost-count-small", headercss: "normal-text", align: "center" },
             { name: "totalWon", title: "Win (total)", width: "20", css: "win-count", headercss: "normal-text", align: "center"  },
-            { name: "totalLost", title: "Lost (total)", width: "20", css: "lost-count", headercss: "normal-text", align: "center"  },
+            { name: "totalLost", title: "Lost (total)", width: "20", css: "lost-count", headercss: "normal-text", align: "center" },
+            { name: "abandons", title: "Abandons", width: "20", css: "lost-count", headercss: "normal-text", align: "center" },
             { name: "triesAverage", title: "Tries (avg.)", width: "20", align: "center" }
         ],
     });
-    $("#dialog-jsGrid").show();
-    $("#modal-div").modal("show");
+    $("#stats-dialog-jsGrid").show();
+    $("#stats-modal-div").modal("show");
 
 }
 

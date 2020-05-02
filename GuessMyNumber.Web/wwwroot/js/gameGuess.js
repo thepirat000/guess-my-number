@@ -5,6 +5,7 @@
     setGuessNextTurnOrWinner(model.game);
     setGuessGameStatus(model.game);
     showGuessButtons(model.game);
+    $("#player-stats-modal-button").hide();
 
     if (model.game.maxTries) {
         $("#guess-tries-left").text("Tries left: " + model.triesLeft);
@@ -79,7 +80,7 @@ function setGuessGameStatus(game) {
 
 function addTryToGuessedGame(number, playerId, tryNumber, answer, currentUser) {
     if (playerId !== currentUser) {
-        tryNumber = tryNumber.split('').map(c => '?').join('');
+        number = number.split('').map(c => '?').join('');
     }
     $("#guess-jsGrid").jsGrid("insertItem", { playerId: playerId, tryNumber: tryNumber, number: number, answer: answer }).done(function () {
     });
@@ -104,13 +105,26 @@ function setAbandonedGuessedGame(gameResponse) {
     showPopupMessage("Loser", msg, true, true);
 }
 
+function setAbandonedGuessedGameBySomeoneElse(gameResponse) {
+    // Guessed game was abandone
+    setGuessNextTurnOrWinner(gameResponse.game);
+    let msg = "You've abandoned the game " + gameResponse.game.gameId;
+    showPopupMessage("Loser", msg, true, true);
+}
+
+
 function setGuessNextTurnOrWinner(game) {
+    let currentUser = $("#username").val();
     if (game.winnerPlayerId) {
         $("#guess-next-turn").text("Winner: " + game.winnerPlayerId);
     }
     else {
         if (game.nextTurnPlayerId) {
-            $("#guess-next-turn").text("Turn: " + game.nextTurnPlayerId);
+            if (currentUser === game.nextTurnPlayerId) {
+                $("#guess-next-turn").text("Your turn").css('font-weight', 'bold');
+            } else {
+                $("#guess-next-turn").text(game.nextTurnPlayerId + "'s turn").css('font-weight', 'normal');;
+            }
         } else {
             $("#guess-next-turn").text("");
         }

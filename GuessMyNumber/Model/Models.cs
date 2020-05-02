@@ -105,6 +105,8 @@ namespace GuessMyNumber.Model
         public int LostAsHost { get; set; }
         public int TotalTries { get; set; }
 
+        public int Abandons { get; set; }
+
         public double TriesAverage
         {
             get

@@ -4,6 +4,7 @@
     $("#host-max-tries").val(model.game.maxTries);
     $("#host-number").text("• ".repeat(model.game.digits).trim());
     $("dropdown-invite").toggle(model.game.status === 0);
+    $("#player-stats-modal-button").hide();
 
     setHostNextTurnOrWinner(model.game);
     setHostGameStatus(model.game);

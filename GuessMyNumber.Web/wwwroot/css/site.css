@@ -87,7 +87,7 @@ body {
   bottom: 0;
   width: 100%;
   white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+  line-height: 40px; 
 }
 
 ul#messages {
@@ -96,7 +96,7 @@ ul#messages {
     padding: 0;
     overflow-y: auto;
     width: 100%;
-    line-height: 1.2em;
+    line-height: 1.4em;
     height: inherit;
 }
 
@@ -119,9 +119,14 @@ ul#messages li p {
     padding: 0px 0px 0px 5px;
 }
 
-#message {
-    width: calc(100% - 55px);
+#emoji-container {
+    width: calc(100% - 65px);
     float: left;
+    margin-top: 4px;
+}
+
+#emoji-container .emojionearea {
+    background-color: #f1f1f1;
 }
 
 .input-button {
@@ -136,6 +141,8 @@ ul#messages li p {
 }
 
 #send {
+    margin-top: 2px;
+    margin: 6px 6px 0px 0px;
     width: 50px;
     float: right;
     display: inline-block;
@@ -151,7 +158,7 @@ ul#messages li p {
     width: calc(100% - 85px);
     display: inline-block;
     background-color: #f1f1f1;
-    height: inherit;
+    height: 100%;
     min-height: 160px;
 }
 
@@ -195,7 +202,6 @@ tr.jsgrid-row,
 tr.jsgrid-alt-row {
     height: 1rem;
     line-height: 1em;
-    /*font-size: small;*/
 }
 
 tr.jsgrid-nodata-row {
@@ -210,6 +216,13 @@ th.jsgrid-header-cell {
 td.jsgrid-cell {
     padding-top: 3px;
     padding-bottom: 3px;
+}
+
+
+#stats-dialog-jsGrid .jsgrid-header-row,
+#stats-dialog-jsGrid .jsgrid-row,
+#stats-dialog-jsGrid .jsgrid-alt-row {
+    font-size: x-small;
 }
 
 #guess-title,
@@ -253,7 +266,7 @@ main {
 
 #messages-chat-div {
     width: 100%;
-    height: inherit;
+    height: 160px;
 }
 
 #host-close,
@@ -271,6 +284,7 @@ main {
 }
 
 #messages-div {
+    border: 1px solid grey;
     margin-bottom: 0.2em;
 }
 
@@ -448,8 +462,26 @@ main {
     margin-top: 5px;
     margin-bottom: 5px;
     min-width: 300px;
-    border: 1px solid grey;
+    border: 2px solid grey;
     display: none;
+}
+
+#host-buttons-div button,
+#guess-buttons-div button {
+    margin: 2px;
+}
+
+#header-messages {
+    background-color: cadetblue;
+    font-weight: 600;
+}
+
+#messages-title-text {
+    margin-left: 10px;
+}
+
+.invite-button {
+    float: right;
 }
 
 #host-game-div {

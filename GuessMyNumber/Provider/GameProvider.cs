@@ -445,12 +445,12 @@ namespace GuessMyNumber.Provider
                         if (p.PlayerId == playerId)
                         {
                             p.Status = PlayerGameStatus.Winner;
-                            InsertGameFinishedToStats(p.PlayerId, true, p.Role, p.TriesCount);
+                            InsertGameFinishedToStats(p.PlayerId, true, p.Role, false, p.TriesCount);
                         }
                         else
                         {
                             p.Status = PlayerGameStatus.Loser;
-                            InsertGameFinishedToStats(p.PlayerId, false, p.Role);
+                            InsertGameFinishedToStats(p.PlayerId, false, p.Role, false);
                         }
                     }
                 }
@@ -473,12 +473,12 @@ namespace GuessMyNumber.Provider
                             if (p.PlayerId == hostPlayer)
                             {
                                 p.Status = PlayerGameStatus.Winner;
-                                InsertGameFinishedToStats(p.PlayerId, true, p.Role);
+                                InsertGameFinishedToStats(p.PlayerId, true, p.Role, false);
                             }
                             else
                             {
                                 p.Status = PlayerGameStatus.Loser;
-                                InsertGameFinishedToStats(p.PlayerId, false, p.Role);
+                                InsertGameFinishedToStats(p.PlayerId, false, p.Role, false);
                             }
                         }
                     }
@@ -626,12 +626,12 @@ namespace GuessMyNumber.Provider
                             if (p.PlayerId == winnerPlayerId)
                             {
                                 p.Status = PlayerGameStatus.Winner;
-                                InsertGameFinishedToStats(p.PlayerId, true, p.Role);
+                                InsertGameFinishedToStats(p.PlayerId, true, p.Role, false);
                             }
                             else
                             {
                                 p.Status = PlayerGameStatus.Loser;
-                                InsertGameFinishedToStats(p.PlayerId, false, p.Role);
+                                InsertGameFinishedToStats(p.PlayerId, false, p.Role, true);
                             }
                         }
                     }
@@ -660,10 +660,12 @@ namespace GuessMyNumber.Provider
                             if (p.PlayerId == game.HostPlayer.PlayerId)
                             {
                                 p.Status = PlayerGameStatus.Winner;
+                                InsertGameFinishedToStats(p.PlayerId, true, p.Role, false);
                             }
                             else
                             {
                                 p.Status = PlayerGameStatus.Loser;
+                                InsertGameFinishedToStats(p.PlayerId, false, p.Role, true);
                             }
                         }
                     }
@@ -730,13 +732,14 @@ namespace GuessMyNumber.Provider
                 LostAsHost = int.Parse(redisDict[StatInfoType.LostAsHost.ToString()] ?? "0"),
                 WonAsGuess = int.Parse(redisDict[StatInfoType.WonAsGuess.ToString()] ?? "0"),
                 WonAsHost = int.Parse(redisDict[StatInfoType.WonAsHost.ToString()] ?? "0"),
-                TotalTries = int.Parse(redisDict[StatInfoType.TotalTriesCount.ToString()] ?? "0")
+                TotalTries = int.Parse(redisDict[StatInfoType.TotalTriesCount.ToString()] ?? "0"),
+                Abandons = int.Parse(redisDict[StatInfoType.Abandons.ToString()] ?? "0")
             };
         }
 
         #region Stats
         /// <summary>Inserts the data for the player stats</summary>
-        private void InsertGameFinishedToStats(string playerId, bool isWon, Role role, int triesCount = 0)
+        private void InsertGameFinishedToStats(string playerId, bool isWon, Role role, bool isAbandon, int triesCount = 0)
         {
             var redisDict = _redis.Collections.GetRedisDictionary<string, string>(string.Format(StatsDictKey, playerId));
             if (role == Role.Host)
@@ -766,6 +769,11 @@ namespace GuessMyNumber.Provider
                     redisDict.IncrementBy(StatInfoType.LostAsGuess.ToString(), 1);
                 }
             }
+            if (isAbandon && !isWon)
+            {
+                // Abandon count
+                redisDict.IncrementBy(StatInfoType.Abandons.ToString(), 1);
+            }
 
         }
 
@@ -775,7 +783,8 @@ namespace GuessMyNumber.Provider
             LostAsHost = -1,
             WonAsHost = 1,
             WonAsGuess = 2,
-
+            // To keep track of the number of abandons (already counted on Losses)
+            Abandons = -3,
             // To store the total tries for games won as guesser
             TotalTriesCount = 10
         }

@@ -12,29 +12,6 @@
 <input type="hidden" id="postCommand" value="@Model.PostCommand" />
 <input type="text" id="clipboard-input" style="display:none;">
 
-<div id="messages-div">
-    <div id="msg-send-div" style="width: 100%; display: inline-block;">
-        <input id="message" type="text" class="input-text" autocomplete="off" />
-        <button id="send" type="button" class="btn btn-sm btn-primary">Send</button>
-    </div>
-
-    <div style="width: 100%;">
-        <label style="font-size: small; height: 1em;">Messages</label>
-        <label style="font-size: small; float: right; margin-right: 50px; height: 1em;">Users</label>
-    </div>
-    <div id="messages-chat-div" class="flex-msg-container">
-        <div id="msg-output-div" class="flex-msg-item">
-            <ul id="messages">
-            </ul>
-        </div>
-
-        <div id="connected-users-div" class="flex-msg-item">
-            <ul id="connected-users">
-            </ul>
-        </div>
-    </div>
-</div>
-
 <div id="games-div" class="flex-game-info-container">
 
     <!-- HOST game -->
@@ -68,14 +45,14 @@
             <table id="host-footer-table">
                 <tr>
                     <td>
-                        <span id="host-next-turn"></span>
+                        <input type="hidden" id="host-max-tries" />
+                        <span id="host-tries-left"></span>
                     </td>
                     <td style="text-align: center;">
                         <span id="host-game-users"></span>
                     </td>
                     <td style="text-align: right;">
-                        <input type="hidden" id="host-max-tries" />
-                        <span id="host-tries-left"></span>
+                        <span id="host-next-turn"></span>
                     </td>
                 </tr>
             </table>
@@ -84,8 +61,8 @@
             <button id="host-start-button" class="btn btn-sm btn-primary start-button">Start</button>
             <button id="host-abandon-button" class="btn btn-sm btn-primary abandon-button">Abandon</button>
 
-            <div id="dropdown-invite" class="btn-group dropup">
-                <button type="button" class="invite-button btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div id="dropdown-invite" class="btn-group dropup invite-button">
+                <button type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-share-alt"></i> Invite
                 </button>
                 <div class="dropdown-menu">
@@ -128,13 +105,13 @@
             <table id="guess-footer-table">
                 <tr>
                     <td>
-                        <span id="guess-next-turn"></span>
+                        <span id="guess-host-player"></span>
                     </td>
                     <td style="text-align: center;">
                         <span id="guess-tries-left"></span>
                     </td>
                     <td style="text-align: right;">
-                        <span id="guess-host-player"></span>
+                        <span id="guess-next-turn"></span>
                     </td>
                 </tr>
             </table>
@@ -151,7 +128,34 @@
 
 </div>
 
+<div id="messages-div" style="display: none;">
+    <!-- Chat messages -->
+    <div id="header-messages" style="width: 100%;">
+        <label id="messages-title-text" style="font-size: small; height: 1em;">Messages</label>
+        <label style="font-size: small; float: right; margin-right: 50px; height: 1em;">Users</label>
+    </div>
+    <div id="messages-chat-div" class="flex-msg-container">
+        <div id="msg-output-div" class="flex-msg-item">
+            <ul id="messages">
+            </ul>
+        </div>
+
+        <div id="connected-users-div" class="flex-msg-item">
+            <ul id="connected-users">
+            </ul>
+        </div>
+    </div>
+    <!-- Chat input box -->
+    <div id="msg-send-div" style="width: 100%; display: inline-block;">
+        <div id="emoji-container"></div>
+        <input id="message" type="text" class="input-text" autocomplete="off" style="display: none;"/>
+        <button id="send" type="button" class="btn btn-sm btn-primary">Send</button>
+    </div>
+</div>
+
+
 <!-- Bootstrap Modal -->
+<!--Game join popup-->
 <div class="modal fade" id="modal-div" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -175,6 +179,29 @@
     </div>
 </div>
 
+<!--Player stats popup-->
+<div class="modal fade" id="stats-modal-div" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="stats-dialog-title" class="modal-title">Player stats</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div id="stats-dialog-body" class="modal-body">
+                <span id="stats-dialog-body-text"></span>
+                <div id="stats-dialog-jsGrid">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="close-stats-modal-button" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--New game popup-->
 <div class="modal fade" id="modal-new-host-game" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
