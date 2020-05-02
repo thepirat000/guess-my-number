@@ -36,7 +36,7 @@ namespace GuessMyNumber.Web.Hubs
             else
             {
                 // Not a command, just a message
-                await Clients.All.ReceiveUserMessage(username, $"<span style='color:gray;'>_{username}_</span> {message}");
+                await Clients.All.ReceiveUserMessage(username, message);
             }
         }
 
