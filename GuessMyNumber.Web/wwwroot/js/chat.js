@@ -364,7 +364,7 @@ function appendLine(user, line) {
     }).html(html).appendTo("#messages");
     saveChatHistory();
     let currentUser = $("#username").val();
-    if (user !== currentUser) {
+    if (user && user !== currentUser) {
         let txt = $($.parseHTML(html)).text();
         if (txt.startsWith(user + " ")) {
             txt = txt.substring(user.length + 1);
