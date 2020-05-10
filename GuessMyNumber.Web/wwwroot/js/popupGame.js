@@ -51,6 +51,8 @@ function showPopupGame(popupType, text) {
     $("#dialog-title").text(popupType === "host" ? "Host games" : "Guess games");
     $("#dialog-body-text").html(text);
     $("#dialog-jsGrid").empty();
+    $("#new-game-modal-button").show();
+
     let currentUser = $("#username").val();
 
     // Query for joinable and playing games

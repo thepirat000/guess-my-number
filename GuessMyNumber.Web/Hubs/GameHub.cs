@@ -1,6 +1,7 @@
 ﻿using GuessMyNumber.API.Helper;
 using GuessMyNumber.Model;
 using GuessMyNumber.Provider;
+using GuessMyNumber.Web.Handler;
 using GuessMyNumber.Web.Models;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;

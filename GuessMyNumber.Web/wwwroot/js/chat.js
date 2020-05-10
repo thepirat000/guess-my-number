@@ -474,6 +474,10 @@ $(document).ready(function () {
         }
         event.preventDefault();
     });
+    $("#header-btn-new-game").on('click', event => {
+        showNewHostGamePopup();
+        event.preventDefault();
+    });
 
     $("#player-stats-modal-button").on('click', event => {
         if (_connectedUsers) {
@@ -502,6 +506,58 @@ $(document).ready(function () {
             setMessageTextFocus();
         });
     }
+
+    $("#new-game-maxtries").on("input", event => {
+        $("#new-host-unlimited-tries").prop('checked', $("#new-game-maxtries").val().length === 0);
+    });
+
+    $("#new-host-unlimited-tries").on("change", event => {
+        if ($("#new-host-unlimited-tries").prop('checked')) {
+            $("#new-game-maxtries").val('');
+        }
+    });
+
+    $("#new-host-unlimited-tries").on("focusout", event => {
+        $("#new-host-unlimited-tries").prop('checked', $("#new-game-maxtries").val().length === 0);
+    });
+
+    $("#guess-game-maxtries").on("input", event => {
+        $("#guess-game-unlimited-tries").prop('checked', $("#guess-game-maxtries").val().length === 0);
+    });
+
+    $("#guess-game-unlimited-tries").on("change", event => {
+        if ($("#guess-game-unlimited-tries").prop('checked')) {
+            $("#guess-game-maxtries").val('');
+        }
+    });
+
+    $("#guess-game-unlimited-tries").on("focusout", event => {
+        $("#guess-game-unlimited-tries").prop('checked', $("#guess-game-maxtries").val().length === 0);
+    });
+
+    $("#create-host-game-button").on('click', event => {
+        if ($("#host-panel").hasClass('active')) {
+            // Create a normal game
+            let number = $("#new-game-number").val();
+            let maxTries = $("#new-host-unlimited-tries").prop('checked') ? null : $("#new-game-maxtries").val();
+            if (number) {
+                let command = "/create " + number + " " + maxTries;
+                sendMessageToServer(command.trim());
+                $("#modal-new-host-game").modal("hide");
+            }
+        }
+        else {
+            // Create a server random game
+            let digits = $("#new-game-digits").val();
+            let maxTries = $("#guess-game-unlimited-tries").prop('checked') ? null : $("#guess-game-maxtries").val();
+            if (digits) {
+                let command = "/create " + ('*'.repeat(digits)) + " " + maxTries;
+                sendMessageToServer(command.trim());
+                $("#modal-new-host-game").modal("hide");
+            }
+        }
+        event.preventDefault();
+    });
 
     restoreChatHistory();
     setMessageTextFocus();
@@ -690,3 +746,4 @@ function displayNotification(title, body, link, duration) {
         console.info(document.body.className)
     }
 })();
+

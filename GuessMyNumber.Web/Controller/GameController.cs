@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 
 namespace GuessMyNumber.Web.Controller
 {
-    [BasicAuthorize("thepirat000.com")]
+
+    [BasicAuthorize("gmn.eastus.cloudapp.azure.com")]
     [ApiController]
     [Route("[controller]")]
     public class GameController : Microsoft.AspNetCore.Mvc.Controller

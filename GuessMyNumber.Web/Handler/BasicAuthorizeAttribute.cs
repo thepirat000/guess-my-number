@@ -30,7 +30,8 @@ namespace GuessMyNumber.Web.Handler
             new User { Id = 2, FirstName = "Marlet", LastName = "Guzman", Username = "marlet", Password = "marlet" },
             new User { Id = 3, FirstName = "Luciana", LastName = "Staiano", Username = "luciana", Password = "luciana" },
             new User { Id = 4, FirstName = "Adriano", LastName = "Colombo", Username = "adri", Password = "adri" },
-            new User { Id = 5, FirstName = "Antonino", LastName = "Colombo", Username = "anto", Password = "anto" }
+            new User { Id = 5, FirstName = "Antonino", LastName = "Colombo", Username = "anto", Password = "anto" },
+            new User { Id = 6, FirstName = "Lupita", LastName = "García", Username = "lupi", Password = "lupi" }
         };
 
         private readonly string realm;
