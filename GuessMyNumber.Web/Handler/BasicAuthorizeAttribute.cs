@@ -27,7 +27,6 @@ namespace GuessMyNumber.Web.Handler
         private readonly static List<User> Users = new List<User>
         {
             new User { Id = 1, FirstName = "Federico", LastName = "Colombo", Username = "fede", Password = "fede" },
-            new User { Id = 2, FirstName = "Marlet", LastName = "Guzman", Username = "marlet", Password = "marlet" },
             new User { Id = 3, FirstName = "Luciana", LastName = "Staiano", Username = "luciana", Password = "luciana" },
             new User { Id = 4, FirstName = "Adriano", LastName = "Colombo", Username = "adri", Password = "adri" },
             new User { Id = 5, FirstName = "Antonino", LastName = "Colombo", Username = "anto", Password = "anto" },
