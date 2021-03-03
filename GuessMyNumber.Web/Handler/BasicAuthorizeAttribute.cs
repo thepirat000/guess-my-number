@@ -70,12 +70,22 @@ namespace GuessMyNumber.Web.Handler
         public bool IsAuthorized(string username, string password)
         {
             // Check that username and password are correct
-            return Users.Any(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase) && u.Password == password);
+            return username != null && password != null
+                && username.Length > 3
+                && username.Length == password.Length
+                && username.ToLowerInvariant() == password.ToLowerInvariant();
+            //return Users.Any(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase) && u.Password == password);
         }
 
         internal static User GetUser(string username)
         {
-            return Users.FirstOrDefault(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase));
+            var user = Users.FirstOrDefault(u => u.Username.Equals(username, StringComparison.InvariantCultureIgnoreCase));
+            if (user == null)
+            {
+                int id = new Random(username.GetHashCode()).Next(1000, 9999);
+                return new User { Id = id, FirstName = username, LastName = "", Username = username, Password = username };
+            }
+            return user;
         }
     }
 }
