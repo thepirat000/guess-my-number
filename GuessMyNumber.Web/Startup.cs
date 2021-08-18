@@ -61,7 +61,11 @@ namespace GuessMyNumber.Web
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            if (_configuration.GetValue<bool>("AppSettings:RedirectHttps"))
+            {
+                app.UseHttpsRedirection(); 
+            }
+            
             app.UseStaticFiles();
 
             app.UseRouting();

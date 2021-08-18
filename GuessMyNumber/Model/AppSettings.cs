@@ -2,6 +2,7 @@
 {
     public class AppSettings
     {
+        public bool RedirectHttps { get; set; }
         public string RedisConnectionString { get; set; }
         public string AnswerStringChars { get; set; }
         public int MinPlayerIdLength { get; set; }
