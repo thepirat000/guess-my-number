@@ -12,6 +12,7 @@ namespace UnitTest
     {
         // TODO: 
         //      - Test more than one guessers (include abandons)
+        //      - Test autoStart parameter
 
         [TestMethod]
         public void CompleteGame_OneGuesser()

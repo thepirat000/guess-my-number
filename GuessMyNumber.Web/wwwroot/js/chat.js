@@ -13,6 +13,7 @@ function enforce_maxlength(event) {
     }
 }
 
+// Docs: https://docs.microsoft.com/en-us/aspnet/core/signalr/javascript-client?view=aspnetcore-3.1
 const connection = new signalR.HubConnectionBuilder().withUrl("/gameHub").build();
 const chat_history_entries = 50;
 const chat_history_hours = 4;
@@ -23,9 +24,11 @@ let users = [];
 let gameStatuses = ['New', 'Started', 'Ended'];
 let _connectedUsers;
 
-connection.start()
-    .then(function () {
-        console.log("connected");
+
+async function start() {
+    try {
+        await connection.start();
+        console.log("SignalR Connected.");
         // Execute post load command (if any)
         let postCommand = $("#postCommand").val();
         if (postCommand) {
@@ -33,13 +36,21 @@ connection.start()
             sendMessageToServer(postCommand);
             $("#postCommand").val('');
         }
-        connection.invoke('getConnectionId')
-            .then(function (connectionId) {
-                sessionStorage.setItem('conectionId', connectionId);
-                // Send the connectionId to controller
-            }).catch(err => console.error(err.toString()));
-    })
-    .catch(err => console.error(err.toString()));
+        var connectionId = await connection.invoke('getConnectionId');
+        sessionStorage.setItem('conectionId', connectionId);
+    } catch (err) {
+        console.log(err);
+        setTimeout(start, 5000);
+    }
+}
+
+connection.onclose(async () => {
+    console.log("SignalR Disconnected, will reconnect...");
+    await start();
+});
+
+// Start the connection.
+start();
 
 // Receive a message from a user
 connection.on("ReceiveUserMessage", function (user, message) {
@@ -290,7 +301,6 @@ function getCurrentGuessGame() {
     return localStorage.getItem('current-guess-gameId');
 }
 
-
 // Receive a user connected list change
 connection.on("UserListChanged", function (connectedUsers) {
     _connectedUsers = connectedUsers;
@@ -540,8 +550,9 @@ $(document).ready(function () {
             // Create a normal game
             let number = $("#new-game-number").val();
             let maxTries = $("#new-host-unlimited-tries").prop('checked') ? null : $("#new-game-maxtries").val();
+            let autoStart = $("#new-host-autostart").prop('checked') ? 1 : 0;
             if (number) {
-                let command = "/create " + number + " " + maxTries;
+                let command = "/create " + number + " " + autoStart + " " + maxTries;
                 sendMessageToServer(command.trim());
                 $("#modal-new-host-game").modal("hide");
             }
@@ -551,7 +562,7 @@ $(document).ready(function () {
             let digits = $("#new-game-digits").val();
             let maxTries = $("#guess-game-unlimited-tries").prop('checked') ? null : $("#guess-game-maxtries").val();
             if (digits) {
-                let command = "/create " + ('*'.repeat(digits)) + " " + maxTries;
+                let command = "/create " + ('*'.repeat(digits)) + " 0 " + maxTries;
                 sendMessageToServer(command.trim());
                 $("#modal-new-host-game").modal("hide");
             }
@@ -743,7 +754,6 @@ function displayNotification(title, body, link, duration) {
             document.body.className = evtMap[evt.type];
         else
             document.body.className = this[hidden] ? "hidden" : "visible";
-        console.info(document.body.className)
     }
 })();
 

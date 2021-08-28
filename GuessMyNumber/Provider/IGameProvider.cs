@@ -9,13 +9,15 @@ namespace GuessMyNumber.Provider
         /// </summary>
         /// <param name="playerId">The player ID</param>
         /// <param name="number">The number to be guessed</param>
-        GameResponse CreateGame(string playerId, string number, int? maxTries);
+        /// <param name="autoStart">Indicates if the user will be put on "playing" status for the joined game</param>
+        GameResponse CreateGame(string playerId, string number, int? maxTries, bool autoStart = false);
 
         /// <summary>
         /// Joins a created game (guesser)
         /// </summary>
         /// <param name="playerId">The player ID</param>
         /// <param name="gameId">The game ID to join</param>
+        /// <param name="startGame">Indicates if the user will be put on "playing" status for the joined game</param>
         GameResponse JoinGame(string playerId, string gameId, bool startGame = false);
 
         /// <summary>

@@ -38,6 +38,7 @@ namespace GuessMyNumber.Model
         public string Number { get; set; }
         public int Digits { get { return Number?.Decrypt().Length ?? 0; } }
         public int? MaxTries { get; set; }
+        public bool IsAutoStart { get; set; }
         public string NextTurnPlayerId { get; set; }
         public List<PlayerGameRole> Players { get; set; }
         [JsonIgnore]

@@ -7,10 +7,11 @@
 > Creates a new game as a host
 
 - Syntax:
-    - `/create {number} [{max-tries}]`
+    - `/create {number} {auto-start} [{max-tries}]`
 
 - Parameters:
-    - `{number}`: The number to be guessed.
+    - `{number}`: The number to be guessed, or a number of asterisks (as many as digits wanted) to generate a random number.
+    - `{auto-start}`: 0 or 1 to indicate if the game should start as soon as the first guesser joins. 
     - `{max-tries}`: (optional) The maximum number of tries before losing the game.
 
 #### `/Join`

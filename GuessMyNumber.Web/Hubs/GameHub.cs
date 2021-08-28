@@ -108,19 +108,24 @@ namespace GuessMyNumber.Web.Hubs
                         throw new ArgumentException("Invalid command parameters", nameof(command));
                     }
                     number = command.Parameters[0];
-                    bool isAuto = false;
+                    bool isRandom = false;
                     if (number.All(c => c == '*'))
                     {
                         // Random number
                         number = GenerateRandomNumber(number.Length);
-                        isAuto = true;
+                        isRandom = true;
+                    }
+                    bool autoStart = false;
+                    if (command.Parameters.Length > 1 && int.TryParse(command.Parameters[1], out int aust))
+                    {
+                        autoStart = aust == 1;
                     }
                     int? maxTries = null;
-                    if (command.Parameters.Length > 1 && int.TryParse(command.Parameters[1], out int mt))
+                    if (command.Parameters.Length > 2 && int.TryParse(command.Parameters[2], out int mt))
                     {
                         maxTries = mt;
                     }
-                    gameResponse = _gameProvider.CreateGame(isAuto ? ServerUsername : username, number, maxTries);
+                    gameResponse = _gameProvider.CreateGame(isRandom ? ServerUsername : username, number, maxTries, autoStart);
                     if (gameResponse.HasErrors)
                     {
                         response.Error = gameResponse.Error;
@@ -128,13 +133,13 @@ namespace GuessMyNumber.Web.Hubs
                     }
                     else
                     {
-                        if (isAuto)
+                        if (isRandom)
                         {
                             _gameProvider.StartGame(ServerUsername, gameResponse.Game.GameId);
                             _gameProvider.JoinGame(username, gameResponse.Game.GameId);
                         }
                         // set message for create game successfully
-                        response.OutputMessage = $"<span style='color:purple;'>**{(isAuto ? ServerUsername : username)}** created game **`{gameResponse.Game.GameId}`** with **`{gameResponse.Game.Digits}`** digits";
+                        response.OutputMessage = $"<span style='color:purple;'>**{(isRandom ? ServerUsername : username)}** created game **`{gameResponse.Game.GameId}`** with **`{gameResponse.Game.Digits}`** digits";
                         if (gameResponse.Game.MaxTries.HasValue)
                         {
                             response.OutputMessage += $" and a maximum of **`{gameResponse.Game.MaxTries.Value}`** tries";

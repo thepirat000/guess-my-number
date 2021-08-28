@@ -191,7 +191,7 @@ namespace GuessMyNumber.Provider
         #endregion Private
 
         #region Public
-        public GameResponse CreateGame(string playerId, string number, int? maxTries)
+        public GameResponse CreateGame(string playerId, string number, int? maxTries, bool autoStart = false)
         {
             // Validate ID format
             ValidatePlayerIdFormat(playerId);
@@ -219,7 +219,7 @@ namespace GuessMyNumber.Provider
                     {
                         PlayerId = playerId,
                         Role = Role.Host,
-                        Status = PlayerGameStatus.Ready
+                        Status = autoStart ? PlayerGameStatus.Playing : PlayerGameStatus.Ready
                     }
                 },
                 Status = GameStatus.Created,
