@@ -1,7 +1,7 @@
 $down = New-Object System.Net.WebClient
 
 # Create restore point
-Checkpoint-Computer -Description 'Before spleeter-gpu'
+Checkpoint-Computer -Description 'Before gmn'
 
 # Install chocolatey
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'));
